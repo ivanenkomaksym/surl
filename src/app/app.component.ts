@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, HomeComponent],
   template: `
-    <h1>Welcome to {{title}}!</h1>
-
-    <router-outlet />
+    <main>
+      <section class="content">
+        <app-home></app-home>
+      </section>
+    </main>
   `,
-  styles: [],
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'surl';
