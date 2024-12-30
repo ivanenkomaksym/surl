@@ -1,12 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [FormsModule],
   template: `
     <div class="url-shortener">
       <div class="url-group">
         <label>Long URL</label>
-        <input type="text" [value]="originalUrl" class="url-input">
+        <input type="text" [(ngModel)]="originalUrl" class="url-input">
       </div>
       
       <div class="url-group">
@@ -23,15 +27,29 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  @Input() originalUrl: string = '';
-  @Input() shortUrl: string = '';
+  constructor(private http: HttpClient) { }
+    
+  originalUrl: string = '';
+  shortUrl: string = '';
 
   copyUrl() {
     navigator.clipboard.writeText(this.shortUrl);
     // You might want to add a toast/notification here
   }
 
-  shorten() {
-    this.shortUrl = 'https://surl.ivanenkomak.com/F9064C6C';
+  private async shortenUrl(url: string): Promise<string> {
+    console.log(url);
+    return new Promise((resolve, reject) => {
+      this.http.get<{short_url: string}>('https://rust-short-url-961241853090.europe-central2.run.app/shorten',
+        { params: {long_url: url} }
+      ).subscribe({
+        next: (response) => resolve(response.short_url),
+        error: (error) => reject(error)
+      });
+    });
+  }
+
+  async shorten() {
+    this.shortUrl = await this.shortenUrl(this.originalUrl);
   }
 }
