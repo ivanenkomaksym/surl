@@ -43,7 +43,7 @@ export class HomeComponent {
       this.http.get<{short_url: string}>('https://rust-short-url-961241853090.europe-central2.run.app/shorten',
         { params: {long_url: url} }
       ).subscribe({
-        next: (response) => resolve(response.short_url),
+        next: (response) => resolve("https://surl.ivanenkomak.com/" + response.short_url),
         error: (error) => reject(error)
       });
     });
