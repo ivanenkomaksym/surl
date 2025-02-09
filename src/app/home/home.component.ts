@@ -47,6 +47,9 @@ import { FormsModule } from '@angular/forms';
           <span>{{summaryResult.clicks}}</span>
         </div>
       </div>
+      <div *ngIf="summaryError" class="summary-error">
+        <p>{{summaryError}}</p>
+      </div>
     </div>
   `,
   styleUrls: ['./home.component.css']
@@ -58,6 +61,7 @@ export class HomeComponent {
   shortUrl: string = '';
   shortenedUrl: string = '';
   summaryResult: {short_url: string, long_url: string, clicks: number} | null = null;
+  summaryError: string | null = null;
 
   copyUrl() {
     navigator.clipboard.writeText(this.shortUrl);
@@ -93,8 +97,19 @@ export class HomeComponent {
   }
 
   async summary() {
-    const result = await this.getSummary(this.shortenedUrl);
-    console.log(result);
-    this.summaryResult = result;
+    try {
+      const result = await this.getSummary(this.shortenedUrl);
+      console.log(result);
+      this.summaryResult = result;
+      this.summaryError = null;
+    } catch (error) {
+      console.error(error);
+      if ((error as any).status === 404) {
+        this.summaryError = 'URL not found. Please check the shortened URL.';
+      } else {
+        this.summaryError = 'Failed to fetch summary. Please try again.';
+      }
+      this.summaryResult = null;
+    }
   }
 }
