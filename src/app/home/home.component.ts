@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl } from '../../common';
 
 @Component({
   selector: 'app-home',
@@ -71,10 +72,10 @@ export class HomeComponent {
   private async shortenUrl(url: string): Promise<string> {
     console.log(url);
     return new Promise((resolve, reject) => {
-      this.http.get<{short_url: string}>('http://localhost/shorten',
+      this.http.get<{short_url: string}>(ShortenUrl,
         { params: {long_url: url} }
       ).subscribe({
-        next: (response) => resolve("https://short.ivanenkomak.com/" + response.short_url),
+        next: (response) => resolve(CreateShortenedUrl(response.short_url)),
         error: (error) => reject(error)
       });
     });
@@ -84,7 +85,7 @@ export class HomeComponent {
     console.log(shortenedUrl);
     return new Promise((resolve, reject) => {
       this.http.get<{short_url: string, long_url: string, clicks: number}>(
-        `http://localhost/${shortenedUrl}/summary`
+        GetSummaryUrl(shortenedUrl)
       ).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error)
