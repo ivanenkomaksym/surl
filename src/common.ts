@@ -10,6 +10,7 @@ console.log('Configuration:', config);
 export default config;
 
 export const ShortenUrl = config.applicationUri + "/shorten";
+export const ShortenUrlRegex = /\b[A-F0-9]{8}\b/;
 
 export function CreateShortenedUrl(shortenedUrl:string):string{
     return `${config.applicationUri}/${shortenedUrl}`;

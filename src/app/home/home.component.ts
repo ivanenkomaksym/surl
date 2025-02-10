@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl } from '../../common';
+import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '../../common';
 
 @Component({
   selector: 'app-home',
@@ -82,10 +82,16 @@ export class HomeComponent {
   }
 
   private async getSummary(shortenedUrl: string): Promise<{short_url: string, long_url: string, clicks: number}> {
-    console.log(shortenedUrl);
+    const matchedHex = shortenedUrl.match(ShortenUrlRegex);
+    console.log(`Input: ${shortenedUrl} => Match: ${matchedHex ? matchedHex[0] : "No match"}`);
+    if (!matchedHex) {
+      throw new Error('Invalid shortened URL');
+    }
+    const matchedString = matchedHex[0];
+
     return new Promise((resolve, reject) => {
       this.http.get<{short_url: string, long_url: string, clicks: number}>(
-        GetSummaryUrl(shortenedUrl)
+        GetSummaryUrl(matchedString)
       ).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error)
@@ -108,7 +114,11 @@ export class HomeComponent {
       if ((error as any).status === 404) {
         this.summaryError = 'URL not found. Please check the shortened URL.';
       } else {
-        this.summaryError = 'Failed to fetch summary. Please try again.';
+        if (error !== undefined) {
+          this.summaryError = (error as string);
+        } else {
+          this.summaryError = 'Failed to fetch summary. Please try again.';
+        }
       }
       this.summaryResult = null;
     }
