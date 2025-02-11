@@ -35,6 +35,9 @@ import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '
       </div>
       
       <div *ngIf="summaryResult" class="summary-result">
+        <div class="summary-item" *ngIf="faviconUrl">
+          <img [src]="faviconUrl" alt="Favicon" width="32" height="32">
+        </div>
         <div class="summary-item">
           <label>Short URL:</label>
           <span>{{summaryResult.short_url}}</span>
@@ -62,6 +65,7 @@ export class HomeComponent {
   shortUrl: string = '';
   shortenedUrl: string = '';
   summaryResult: {short_url: string, long_url: string, clicks: number} | null = null;
+  faviconUrl: string | null = null;
   summaryError: string | null = null;
 
   copyUrl() {
@@ -108,6 +112,8 @@ export class HomeComponent {
       const result = await this.getSummary(this.shortenedUrl);
       console.log(result);
       this.summaryResult = result;
+      const url = new URL(result.long_url);
+      this.faviconUrl = `https://icons.duckduckgo.com/ip3/${url.hostname}.ico`;
       this.summaryError = null;
     } catch (error) {
       console.error(error);
