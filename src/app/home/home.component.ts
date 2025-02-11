@@ -1,13 +1,13 @@
-import { CommonModule } from '@angular/common'; 
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SummaryComponent } from '../summary/summary.component';
 import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '../../common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, SummaryComponent],
   template: `
     <div class="url-shortener">
       <div class="url-group">
@@ -34,26 +34,7 @@ import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '
         <button class="summary" (click)="summary()">Summary</button>
       </div>
       
-      <div *ngIf="summaryResult" class="summary-result">
-        <div class="summary-item" *ngIf="faviconUrl">
-          <img [src]="faviconUrl" alt="Favicon" width="32" height="32">
-        </div>
-        <div class="summary-item">
-          <label>Short URL:</label>
-          <span>{{summaryResult.short_url}}</span>
-        </div>
-        <div class="summary-item">
-          <label>Long URL:</label>
-          <span>{{summaryResult.long_url}}</span>
-        </div>
-        <div class="summary-item">
-          <label>Clicks:</label>
-          <span>{{summaryResult.clicks}}</span>
-        </div>
-      </div>
-      <div *ngIf="summaryError" class="summary-error">
-        <p>{{summaryError}}</p>
-      </div>
+      <app-summary [summaryResult]="summaryResult" [summaryError]="summaryError" [faviconUrl]="faviconUrl"></app-summary>
     </div>
   `,
   styleUrls: ['./home.component.css']
@@ -64,7 +45,7 @@ export class HomeComponent {
   originalUrl: string = '';
   shortUrl: string = '';
   shortenedUrl: string = '';
-  summaryResult: {short_url: string, long_url: string, clicks: number} | null = null;
+  summaryResult: { short_url: string, long_url: string, clicks: number } | null = null;
   faviconUrl: string | null = null;
   summaryError: string | null = null;
 
@@ -76,8 +57,8 @@ export class HomeComponent {
   private async shortenUrl(url: string): Promise<string> {
     console.log(url);
     return new Promise((resolve, reject) => {
-      this.http.get<{short_url: string}>(ShortenUrl,
-        { params: {long_url: url} }
+      this.http.get<{ short_url: string }>(ShortenUrl,
+        { params: { long_url: url } }
       ).subscribe({
         next: (response) => resolve(CreateShortenedUrl(response.short_url)),
         error: (error) => reject(error)
@@ -85,7 +66,7 @@ export class HomeComponent {
     });
   }
 
-  private async getSummary(shortenedUrl: string): Promise<{short_url: string, long_url: string, clicks: number}> {
+  private async getSummary(shortenedUrl: string): Promise<{ short_url: string, long_url: string, clicks: number }> {
     const matchedHex = shortenedUrl.match(ShortenUrlRegex);
     console.log(`Input: ${shortenedUrl} => Match: ${matchedHex ? matchedHex[0] : "No match"}`);
     if (!matchedHex) {
@@ -94,7 +75,7 @@ export class HomeComponent {
     const matchedString = matchedHex[0];
 
     return new Promise((resolve, reject) => {
-      this.http.get<{short_url: string, long_url: string, clicks: number}>(
+      this.http.get<{ short_url: string, long_url: string, clicks: number }>(
         GetSummaryUrl(matchedString)
       ).subscribe({
         next: (response) => resolve(response),
