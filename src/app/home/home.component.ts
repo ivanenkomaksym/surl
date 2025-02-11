@@ -8,35 +8,7 @@ import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '
   selector: 'app-home',
   standalone: true,
   imports: [FormsModule, SummaryComponent],
-  template: `
-    <div class="url-shortener">
-      <div class="url-group">
-        <label>Long URL</label>
-        <input type="text" [(ngModel)]="originalUrl" class="url-input">
-      </div>
-      
-      <div class="url-group">
-        <label>Short URL</label>
-        <input type="text" [value]="shortUrl" readonly class="url-input">
-      </div>
-
-      <div class="button-container">
-        <button class="shorten" (click)="shorten()">Shorten</button>
-        <button class="copy-button" (click)="copyUrl()">Copy</button>
-      </div>
-      
-      <div class="url-group">
-        <label>Shorten URL</label>
-        <input type="text" [(ngModel)]="shortenedUrl" class="url-input">
-      </div>
-
-      <div class="button-container">
-        <button class="summary" (click)="summary()">Summary</button>
-      </div>
-      
-      <app-summary [summaryResult]="summaryResult" [summaryError]="summaryError" [faviconUrl]="faviconUrl"></app-summary>
-    </div>
-  `,
+  templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
