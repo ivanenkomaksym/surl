@@ -14,3 +14,4 @@
 <div *ngIf="summaryError" class="summary-error">
   <p>{{summaryError}}</p>
 </div>
+<app-analytics-table [analytics]="summaryResult ? summaryResult.analytics : []"></app-analytics-table>

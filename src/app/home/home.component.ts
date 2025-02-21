@@ -3,29 +3,23 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SummaryComponent } from '../summary/summary.component';
 import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '../../common';
-import { AnalyticsTableComponent } from "../analytics-table/analytics-table.component";
+import { SummaryResult } from '../common/SummaryResult';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, SummaryComponent, AnalyticsTableComponent],
+  imports: [FormsModule, SummaryComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent {
   constructor(private http: HttpClient) { }
     
   originalUrl: string = '';
   shortUrl: string = '';
   shortenedUrl: string = '';
-  summaryResult: { short_url: string, long_url: string } | null = null;
-  analyticsData: Array<{
-    created_at: string;
-    language?: string;
-    os?: string;
-    ip?: string;
-    location?: string;
-  }> = [];
+  summaryResult: SummaryResult | null = null;
   faviconUrl: string | null = null;
   summaryError: string | null = null;
 
@@ -46,7 +40,7 @@ export class HomeComponent {
     });
   }
 
-  private async getSummary(shortenedUrl: string): Promise<{ short_url: string, long_url: string }> {
+  private async getSummary(shortenedUrl: string): Promise<SummaryResult> {
     const matchedHex = shortenedUrl.match(ShortenUrlRegex);
     console.log(`Input: ${shortenedUrl} => Match: ${matchedHex ? matchedHex[0] : "No match"}`);
     if (!matchedHex) {
@@ -55,7 +49,7 @@ export class HomeComponent {
     const matchedString = matchedHex[0];
 
     return new Promise((resolve, reject) => {
-      this.http.get<{ short_url: string, long_url: string }>(
+      this.http.get<SummaryResult>(
         GetSummaryUrl(matchedString)
       ).subscribe({
         next: (response) => resolve(response),
