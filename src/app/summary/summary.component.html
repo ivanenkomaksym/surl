@@ -4,11 +4,11 @@
   </div>
   <div class="summary-item">
     <label>Short URL:</label>
-    <span>{{summaryResult?.short_url}}</span>
+    <span>{{summaryResult ? summaryResult.short_url : ''}}</span>
   </div>
   <div class="summary-item">
     <label>Long URL:</label>
-    <span>{{summaryResult?.long_url}}</span>
+    <span>{{summaryResult ? summaryResult.long_url : ''}}</span>
   </div>
 </div>
 <div *ngIf="summaryError" class="summary-error">

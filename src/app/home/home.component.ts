@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SummaryComponent } from '../summary/summary.component';
 import { CreateShortenedUrl, GetSummaryUrl, ShortenUrl, ShortenUrlRegex } from '../../common';
+import { AnalyticsTableComponent } from "../analytics-table/analytics-table.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, SummaryComponent],
+  imports: [FormsModule, SummaryComponent, AnalyticsTableComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -18,6 +19,13 @@ export class HomeComponent {
   shortUrl: string = '';
   shortenedUrl: string = '';
   summaryResult: { short_url: string, long_url: string } | null = null;
+  analyticsData: Array<{
+    created_at: string;
+    language?: string;
+    os?: string;
+    ip?: string;
+    location?: string;
+  }> = [];
   faviconUrl: string | null = null;
   summaryError: string | null = null;
 
