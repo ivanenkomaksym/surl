@@ -17,7 +17,7 @@ export class HomeComponent {
   originalUrl: string = '';
   shortUrl: string = '';
   shortenedUrl: string = '';
-  summaryResult: { short_url: string, long_url: string, clicks: number } | null = null;
+  summaryResult: { short_url: string, long_url: string } | null = null;
   faviconUrl: string | null = null;
   summaryError: string | null = null;
 
@@ -38,7 +38,7 @@ export class HomeComponent {
     });
   }
 
-  private async getSummary(shortenedUrl: string): Promise<{ short_url: string, long_url: string, clicks: number }> {
+  private async getSummary(shortenedUrl: string): Promise<{ short_url: string, long_url: string }> {
     const matchedHex = shortenedUrl.match(ShortenUrlRegex);
     console.log(`Input: ${shortenedUrl} => Match: ${matchedHex ? matchedHex[0] : "No match"}`);
     if (!matchedHex) {
@@ -47,7 +47,7 @@ export class HomeComponent {
     const matchedString = matchedHex[0];
 
     return new Promise((resolve, reject) => {
-      this.http.get<{ short_url: string, long_url: string, clicks: number }>(
+      this.http.get<{ short_url: string, long_url: string }>(
         GetSummaryUrl(matchedString)
       ).subscribe({
         next: (response) => resolve(response),

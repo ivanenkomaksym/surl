@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent {
-  @Input() summaryResult: { short_url: string, long_url: string, clicks: number } | null = null;
+  @Input() summaryResult: { short_url: string, long_url: string } | null = null;
   @Input() summaryError: string | null = null;
   @Input() faviconUrl: string | null = null;
 }
