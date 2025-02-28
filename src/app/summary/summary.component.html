@@ -4,14 +4,17 @@
   </div>
   <div class="summary-item">
     <label>Short URL:</label>
-    <span>{{summaryResult ? summaryResult.short_url : ''}}</span>
+    <span>{{summaryResult.short_url}}</span>
   </div>
   <div class="summary-item">
     <label>Long URL:</label>
-    <span>{{summaryResult ? summaryResult.long_url : ''}}</span>
+    <span>{{summaryResult.long_url}}</span>
   </div>
+  <app-analytics-table 
+    *ngIf="summaryResult.analytics && summaryResult.analytics.length > 0"
+    [analytics]="summaryResult.analytics">
+  </app-analytics-table>
 </div>
 <div *ngIf="summaryError" class="summary-error">
   <p>{{summaryError}}</p>
 </div>
-<app-analytics-table [analytics]="summaryResult ? summaryResult.analytics : []"></app-analytics-table>

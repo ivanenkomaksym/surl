@@ -35,9 +35,14 @@
 
   .button-container {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+    gap: 10px; /* Adds spacing between buttons */
+    flex-wrap: wrap; /* Ensures wrapping on very small screens */
+    justify-content: center;
+  }
+
+  .button-container button {
+    flex: 1; /* Makes buttons evenly sized */
+    min-width: 100px; /* Prevents excessive shrinking */
   }
 
   .copy-button {

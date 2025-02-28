@@ -1,12 +1,28 @@
-table {
-    width: 100%;
+/* Ensure the table remains visible */
+.analytics-table {
+  overflow-x: auto;
+  max-width: 200%;
+}
+
+.analytics-table table {
+  width: 200%;
+  border-collapse: collapse;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  table {
+    font-size: 12px; /* Reduce font size for mobile */
   }
-  
-  th {
-    font-weight: bold;
+
+  th, td {
+    padding: 4px; /* Reduce padding */
+    white-space: normal; /* Allow wrapping */
   }
-  
-  .mat-elevation-z8 {
-    border-radius: 8px;
+
+  /* Hide less important columns on mobile */
+  .mat-column-ip,
+  .mat-column-location {
+    display: none;
   }
-  
+}
